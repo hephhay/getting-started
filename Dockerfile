@@ -13,10 +13,12 @@ COPY app/src ./src
 
 # Run tests to validate app
 FROM app-base AS test
+ENV PYTHON /usr/bin/python3
 RUN yarn install
 RUN yarn test
 
 # Clear out the node_modules and create the zip
+RUN apk update
 FROM app-base AS app-zip-creator
 COPY --from=test /app/package.json /app/yarn.lock ./
 COPY app/spec ./spec
